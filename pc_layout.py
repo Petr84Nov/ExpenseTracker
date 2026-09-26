@@ -1,32 +1,38 @@
+import os
 import customtkinter as ctk
 from datetime import date
 
-from config import categories, default_font, default_by_category
+from config import categories, default_font
 from expense_analyzer import ExpenseAnalyzer
 from expense_manager import ExpenseManager
-
 
 class ExpenseLayout(ctk.CTk):
     def __init__(self):
         super().__init__()
 
+        self.expenses = None
         self.title('Expense')
-        self.geometry('350x500')
+        self.geometry('350x520')
         self.resizable(False, False)
         #self.today_date = date.today().strftime('%d.%m.%Y')
 
-        self.expenses = ExpenseManager('expenses.json').load_expenses()
-        self.category_amount = default_by_category
-
-
         def load_total_amount():
             from expense_analyzer import ExpenseAnalyzer
+            self.expenses = ExpenseManager('expenses.json').load_expenses()
             expense_analyzer = ExpenseAnalyzer(self.expenses)
             total_amount = expense_analyzer.total_amount()
             self.category_amount = expense_analyzer.total_by_category()
             return total_amount
 
         load_total_amount()
+
+        def fill_expenses():
+            self.total_label.configure(text=f'{load_total_amount()} Kč')
+            self.food_label.configure(text=f'{self.category_amount.get('food', 0)} Kč')
+            self.transport_label.configure(text=f'{self.category_amount.get('transport', 0)} Kč')
+            self.housing_label.configure(text=f'{self.category_amount.get("housing", 0)} Kč')
+            self.fun_label.configure(text=f'{self.category_amount.get("fun", 0)} Kč')
+            self.other_label.configure(text=f'{self.category_amount.get("other", 0)} Kč')
 
 
         def save_expense():
@@ -39,43 +45,47 @@ class ExpenseLayout(ctk.CTk):
             self.expenses.append(new_expense)
             expense_manager = ExpenseManager()
             expense_manager.save_expenses(self.expenses)
-            self.total_label.configure(text=load_total_amount())
-            self.food_label.configure(text=self.category_amount.get('food', 0))
-            self.transport_label.configure(text=self.category_amount.get('transport', 0))
-            self.housing_label.configure(text=self.category_amount.get("housing", 0))
-            self.fun_label.configure(text=self.category_amount.get("fun", 0))
-            self.other_label.configure(text=self.category_amount.get("other", 0))
+            fill_expenses()
+
+        def reset():
+            try:
+                os.remove('expenses.json')
+            except FileNotFoundError:
+                pass
+            load_total_amount()
+            fill_expenses()
 
         # output frame
         view_frame = ctk.CTkFrame(self, fg_color='transparent')
-        view_frame.pack(side='top', fill='both', padx=(10, 10), pady=(10, 30))
+        view_frame.pack(side='top', fill='both', padx=(10, 10), pady=(10, 30),)
+        view_frame.grid_rowconfigure(0, weight=0)
+        view_frame.grid_columnconfigure(1, weight=1)
 
         ctk.CTkLabel(view_frame, text=f'Total expenses: ', font=default_font).grid(row=0, column=0, padx=(10, 10), sticky='w')
-        self.total_label = ctk.CTkLabel(view_frame, text=str(load_total_amount()), font=default_font)
-        self.total_label.grid(row=0, column=1, padx=(10, 30))
+        self.total_label = ctk.CTkLabel(view_frame, text=f'{load_total_amount()} Kč', font=default_font)
+        self.total_label.grid(row=0, column=1, padx=(10, 30), sticky='e')
 
         ctk.CTkLabel(view_frame, text='Food: ', font=default_font).grid(row=1, column=0, padx=(10, 30), sticky='w')
-        self.food_label = ctk.CTkLabel(view_frame, text=str(self.category_amount.get('food', 0)), font=default_font)
+        self.food_label = ctk.CTkLabel(view_frame, text=f'{self.category_amount.get('food', 0)} Kč', font=default_font)
         self.food_label.grid(row=1, column=1, padx=(10, 30), sticky='e')
 
         ctk.CTkLabel(view_frame, text='Transport: ', font=default_font).grid(row=2, column=0, padx=(10, 30), sticky='w')
-        self.transport_label = ctk.CTkLabel(view_frame, text=str(self.category_amount.get('transport', 0)), font=default_font)
+        self.transport_label = ctk.CTkLabel(view_frame, text=f'{self.category_amount.get('transport', 0)} Kč', font=default_font)
         self.transport_label.grid(row=2, column=1, padx=(10, 30), sticky='e')
 
         ctk.CTkLabel(view_frame, text='Housing: ', font=default_font).grid(row=3, column=0, padx=(10, 30), sticky='w')
-        self.housing_label = ctk.CTkLabel(view_frame, text=str(self.category_amount.get('housing', 0)), font=default_font)
+        self.housing_label = ctk.CTkLabel(view_frame, text=f'{self.category_amount.get('housing', 0)} Kč', font=default_font)
         self.housing_label.grid(row=3, column=1, padx=(10, 30), sticky='e')
 
         ctk.CTkLabel(view_frame, text='Fun: ', font=default_font).grid(row=4, column=0, padx=(10, 30), sticky='w')
-        self.fun_label = ctk.CTkLabel(view_frame, text=str(self.category_amount.get('fun', 0)), font=default_font)
+        self.fun_label = ctk.CTkLabel(view_frame, text=f'{self.category_amount.get('fun', 0)} Kč', font=default_font)
         self.fun_label.grid(row=4, column=1, padx=(10, 30), sticky='e')
 
         ctk.CTkLabel(view_frame, text='Other: ', font=default_font).grid(row=5, column=0, padx=(10, 30), sticky='w')
-        self.other_label = ctk.CTkLabel(view_frame, text=str(self.category_amount.get('other', 0)), font=default_font)
+        self.other_label = ctk.CTkLabel(view_frame, text=f'{self.category_amount.get('other', 0)} Kč', font=default_font)
         self.other_label.grid(row=5, column=1, padx=(10, 30), sticky='e')
 
-
-
+        ctk.CTkButton(view_frame, text='Reset', font=default_font, command=lambda: reset()).grid(row=6, column=0, columnspan=2 , padx=(10, 30), sticky='ew')
 
 
         # input frame
@@ -112,6 +122,10 @@ class ExpenseLayout(ctk.CTk):
         actual_date = date.today().strftime('%d.%m.%Y')
         ctk.CTkLabel(input_frame, text=actual_date, font=default_font).grid(row=2, column=1, padx=(10, 30))
 
+        self.note = ctk.CTkTextbox(master=input_frame, wrap='word', height=100, font=default_font)
+        self.note.grid(row=3, column=0, columnspan=2 , sticky='ew' , padx=(10, 10), pady=(10, 10))
+
+        # save button
         save_button = ctk.CTkButton(
             input_frame,
             text='Add',
@@ -119,16 +133,7 @@ class ExpenseLayout(ctk.CTk):
             corner_radius=25,
             command=save_expense,
         )
-
-        self.note = ctk.CTkTextbox(master=input_frame, wrap='word', height=100, font=default_font)
-        self.note.grid(row=3, column=0, columnspan=2 , sticky='ew' , padx=(10, 10), pady=(10, 10))
-
-        # save button
         save_button.grid(row=4, column=0, columnspan=2, sticky='ew', padx=(10, 10))
-
-
-
-
 
 
 

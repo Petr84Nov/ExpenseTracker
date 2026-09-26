@@ -1,6 +1,5 @@
 import os
 
-from config import default_by_category
 from expense import Expense
 import json
 

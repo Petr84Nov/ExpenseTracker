@@ -1,2 +1,5 @@
-import customtkinter
 
+from pc_layout import ExpenseLayout
+
+expense = ExpenseLayout
+expense.mainloop()
