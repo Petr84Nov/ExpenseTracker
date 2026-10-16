@@ -17,6 +17,7 @@ class Expense:
         return data
 
     # načtení z JSON
+    # @classmethod
     def from_dict(data: dict) -> 'Expense':
         data['date'] = date.fromisoformat(data['date'])
         return Expense(**data)
