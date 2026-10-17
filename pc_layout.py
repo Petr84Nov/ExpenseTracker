@@ -166,5 +166,5 @@ class ExpenseLayout(ctk.CTk):
 
 
 
-app = ExpenseLayout()
-app.mainloop()
+# app = ExpenseLayout()
+# app.mainloop()
