@@ -154,17 +154,17 @@ class ExpenseLayout(ctk.CTk):
         main_width = self.winfo_width()
 
         # spočítáme novou pozici: šířka hlavního okna + 10 pixelů mezera
-        new_x = main_x + main_width + 200
+        new_x = main_x + main_width + 100
         new_y = main_y
-        details_win.geometry(f'350x500+{new_x}+{new_y})')
+        details_win.geometry(f'+{new_x}+{new_y}')
 
         # přenesení okna do popředí a aktivace
-        details_win.lift
-        details_win.focus
+        details_win.after(250, lambda: (details_win.lift(), details_win.focus_force()) )
 
 
 
 
 
-# app = ExpenseLayout()
-# app.mainloop()
+
+app = ExpenseLayout()
+app.mainloop()

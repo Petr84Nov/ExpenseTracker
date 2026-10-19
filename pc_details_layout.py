@@ -7,7 +7,7 @@ class ExpenseDetailLayout(ctk.CTkToplevel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.title('Expense Details')
-        self.geometry('350x500')
+        self.geometry('500x450')
         self.resizable(False, False)
 
         # načtení výdajů
@@ -51,22 +51,30 @@ class ExpenseDetailLayout(ctk.CTkToplevel):
         # řádek s názvem nebo poznámkou, částkou a tlačítkem delete
         for index, expense in enumerate(filtered_expenses):
             row_frame = ctk.CTkFrame(self.scroll_frame, fg_color='transparent')
-            row_frame.pack(fill='left', padx=5)
+            row_frame.pack(fill='x', padx=5)
+            row_frame.grid_columnconfigure(0, weight=1)
 
             # název, částka
             text_decription = expense.note if expense.note else category
-            decription_label = ctk.CTkLabel(row_frame, text=text_decription, fg='blue', font=DEFAULT_FONT)
-            decription_label.pack(side='left', padx=20)
+            decription_label = ctk.CTkLabel(row_frame, text=text_decription, text_color='blue', font=DEFAULT_FONT,
+                                            wraplength=200, # zalamovač řádků
+                                            justify='left', # zarovná řádka doleva
+                                            anchor='w')
+            decription_label.grid(row=0, column=0, padx=5, pady=5, sticky='w')
+
+            amount_label = ctk.CTkLabel(row_frame, text=f'{expense.amount} Kč', text_color='blue', font=DEFAULT_FONT)
+            amount_label.grid(row=0, column=1, padx=5,)
 
             # delete button
             delete_button = ctk.CTkButton(
                 row_frame,
                 text='Delete',
                 width=70,
+                height=24,
                 font=DEFAULT_FONT,
                 command=lambda e=expense: self.delete_expense(e)
             )
-            delete_button.pack(side='right', padx=5)
+            delete_button.grid(row=0, column=2, padx=5, pady=5)
 
     def delete_expense(self, expense_to_delete):
         print(f'Mazání: {expense_to_delete}')
