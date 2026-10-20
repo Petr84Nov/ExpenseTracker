@@ -44,7 +44,7 @@ class ExpenseDetailLayout(ctk.CTkToplevel):
         # výpis výdajů pro danou kategorii
         filtered_expenses = self.analyzer.filter_by_category(category)
         if not filtered_expenses:
-            warning_label = ctk.CTkLabel(self.scroll_frame, text='Nenalezeny žádné výdaje', fg='red', font=DEFAULT_FONT)
+            warning_label = ctk.CTkLabel(self.scroll_frame, text='Nenalezeny žádné výdaje', text_color='red', font=DEFAULT_FONT)
             warning_label.pack(pady=20)
             return
 
@@ -77,7 +77,12 @@ class ExpenseDetailLayout(ctk.CTkToplevel):
             delete_button.grid(row=0, column=2, padx=5, pady=5)
 
     def delete_expense(self, expense_to_delete):
-        print(f'Mazání: {expense_to_delete}')
+        # print(f'Mazání: {expense_to_delete}')
+        self.expenses.remove(expense_to_delete) # odstranění položky z lokálního slovníku
+        ExpenseManager().save_expenses(self.expenses) # přepsání expese.json novými daty
+        # překreslí aktuálně vybranou kategorii
+        current_category = self.category_box.get()
+        self.display_expenses(current_category)
 
 
 
