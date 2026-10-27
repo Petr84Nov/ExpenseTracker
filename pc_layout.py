@@ -16,7 +16,7 @@ class ExpenseLayout(ctk.CTk):
 
         self.expenses = None
         self.title('Expense')
-        self.geometry('350x600')
+        self.geometry('350x620')
         self.resizable(False, False)
         #self.today_date = date.today().strftime('%d.%m.%Y')
 
@@ -106,8 +106,8 @@ class ExpenseLayout(ctk.CTk):
         self.other_label = ctk.CTkLabel(view_frame, text=f'{self.category_amount.get('other', 0)} Kč', font=DEFAULT_FONT)
         self.other_label.grid(row=6, column=1, padx=(10, 30), sticky='e')
 
-        ctk.CTkButton(view_frame, text='Details', font=DEFAULT_FONT, command=self.open_details_window).grid(row=7, column=0, columnspan=2, padx=(10, 30), sticky='ew')
-        ctk.CTkButton(view_frame, text='Reset', font=DEFAULT_FONT, command=lambda: reset()).grid(row=8, column=0, columnspan=2, padx=(10, 30), sticky='ew')
+        ctk.CTkButton(view_frame, text='Details', font=DEFAULT_FONT, corner_radius=25, command=self.open_details_window).grid(row=7, column=0, columnspan=2, padx=(10, 30), sticky='ew')
+        ctk.CTkButton(view_frame, text='Reset', font=DEFAULT_FONT, corner_radius=25, command=lambda: reset()).grid(row=8, column=0, columnspan=2, padx=(10, 30), sticky='ew')
 
 
         # input frame
@@ -148,14 +148,12 @@ class ExpenseLayout(ctk.CTk):
         self.note.grid(row=3, column=0, columnspan=2 , sticky='ew' , padx=(10, 10), pady=(10, 10))
 
         # save button
-        save_button = ctk.CTkButton(
-            input_frame,
-            text='Add',
-            font=DEFAULT_FONT,
-            corner_radius=25,
-            command=save_expense,
-        )
+        save_button = ctk.CTkButton(input_frame, text='Add', font=DEFAULT_FONT, corner_radius=25, command=save_expense, )
         save_button.grid(row=4, column=0, columnspan=2, sticky='ew', padx=(10, 10))
+
+        # exit button
+        exit_button = ctk.CTkButton(input_frame, text='Exit', font=DEFAULT_FONT, corner_radius=25, command=lambda: exit())
+        exit_button.grid(row=5, column=0, columnspan=2, sticky='ew', padx=(10, 10))
 
     # otevře okno s detaily
     def open_details_window(self):
@@ -211,5 +209,5 @@ class ExpenseLayout(ctk.CTk):
 
 
 
-app = ExpenseLayout()
-app.mainloop()
+# app = ExpenseLayout()
+# app.mainloop()

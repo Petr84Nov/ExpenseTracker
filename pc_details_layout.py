@@ -88,6 +88,7 @@ class ExpenseDetailLayout(ctk.CTkToplevel):
                 width=70,
                 height=24,
                 font=DEFAULT_FONT,
+                corner_radius=25,
                 command=lambda e=expense: self.delete_expense(e)
             )
             delete_button.grid(row=0, column=2, padx=5, pady=5)
