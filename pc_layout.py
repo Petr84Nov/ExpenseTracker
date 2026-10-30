@@ -6,7 +6,6 @@ from components import DateFilteredWidgert
 from config import CATEGORIES, DEFAULT_FONT, MONTHS
 from pc_details_layout import ExpenseDetailLayout
 from expense_manager import ExpenseManager
-from expense_analyzer import ExpenseAnalyzer
 
 from tkinter import messagebox
 
@@ -18,7 +17,6 @@ class ExpenseLayout(ctk.CTk):
         self.title('Expense')
         self.geometry('350x620')
         self.resizable(False, False)
-        #self.today_date = date.today().strftime('%d.%m.%Y')
 
         self.load_total_amount()
 
@@ -65,19 +63,6 @@ class ExpenseLayout(ctk.CTk):
         view_frame.pack(side='top', fill='both', padx=(10, 10), pady=(10, 30),)
         view_frame.grid_rowconfigure(0, weight=0)
         view_frame.grid_columnconfigure(1, weight=1)
-
-
-        # self.month_box = ctk.CTkComboBox(view_frame, values=MONTHS, font=DEFAULT_FONT, command=lambda _: fill_expenses())
-        # current_month_name = date.today().strftime('%B')
-        # default_month = current_month_name if current_month_name in MONTHS else 'All'
-        # self.month_box.set(default_month)
-        # self.month_box.grid(row=0, column=0, padx=(10, 10), pady=10 , sticky='w')
-        #
-        # self.year_box = ctk.CTkComboBox(view_frame, values=self.available_years, font=DEFAULT_FONT, command=on_year_changed)
-        # current_year = str(date.today().year)
-        # default_year = current_year if current_year in self.available_years else 'All'
-        # self.year_box.set(default_year)
-        # self.year_box.grid(row=0, column=1, padx=(10, 10), pady=10, sticky='w')
 
         self.date_filter = DateFilteredWidgert(view_frame, self.expense_analyzer, on_change_callback=self.fill_expenses)
         self.date_filter.grid(row=0, column=0, columnspan=2 , padx=5, pady=5)
@@ -165,6 +150,16 @@ class ExpenseLayout(ctk.CTk):
 
         # spočítáme novou pozici: šířka hlavního okna + 10 pixelů mezera
         new_x = main_x + main_width + 100
+
+        # celková šířka obrazovky monitoru
+        screen_width = self.winfo_screenwidth()
+        details_width = 500 # šířka okna details
+
+        # pokud by se okno vpravo zobrazilo mimo obrazovku
+        if new_x + details_width > screen_width:
+            # new_x = main_x + details_width - 800 # otevření details zleva
+            new_x = (main_x + 200) - (main_width + details_width)
+
         new_y = main_y
         details_win.geometry(f'+{new_x}+{new_y}')
 
@@ -178,8 +173,6 @@ class ExpenseLayout(ctk.CTk):
 
         current_month_name = date.today().strftime('%B')  # zjistí aktuální měsíc
         current_year = date.today().year
-        # selected_month = self.month_box.get() if hasattr(self, 'month_box') else current_month_name
-        # selected_year = self.year_box.get() if hasattr(self, 'year_box') else str(date.today().year)
         if hasattr(self, 'date_filter'):
             selected_month, selected_year = self.date_filter.get_selected_values()
         else:
@@ -209,5 +202,3 @@ class ExpenseLayout(ctk.CTk):
 
 
 
-# app = ExpenseLayout()
-# app.mainloop()

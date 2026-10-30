@@ -1,6 +1,6 @@
 import customtkinter as ctk
 from datetime import date
-from config import CATEGORIES, DEFAULT_FONT, MONTHS
+from config import  DEFAULT_FONT, MONTHS
 
 class DateFilteredWidgert(ctk.CTkFrame):
     def __init__(self, master, analyzer, on_change_callback=None, **kwargs):

@@ -17,15 +17,6 @@ class ExpenseDetailLayout(ctk.CTkToplevel):
         self.analyzer = ExpenseAnalyzer(self.expenses)
         self.on_expense_changed = on_expense_changed
 
-        # date_frame = ctk.CTkFrame(self, fg_color='transparent')
-        # date_frame.pack(padx=10, pady=5, fill='x', expand=True)
-        #
-        # self.month_box = ctk.CTkComboBox(date_frame, values=MONTHS, font=DEFAULT_FONT)
-        # self.month_box.grid(row=0, column=0, padx=10, pady=5, sticky='w')
-        #
-        # self.year_box = ctk.CTkComboBox(date_frame, values=['2026', 'All'], font=DEFAULT_FONT)
-        # self.year_box.grid(row=0, column=1, padx=10, pady=5, sticky='w')
-
         self.date_filter = DateFilteredWidgert(self, self.analyzer, on_change_callback=self.refresh_expenses)
         self.date_filter.pack(fill='both', padx=5, pady=5, expand=True)
 
@@ -108,9 +99,6 @@ class ExpenseDetailLayout(ctk.CTkToplevel):
         self.expenses.remove(expense_to_delete) # odstranění položky z lokálního slovníku
         ExpenseManager('expenses.json').save_expenses(self.expenses) # přepsání expese.json novými daty
         # překreslí aktuálně vybranou kategorii
-        # current_category = self.category_box.get()
-        # self.display_expenses(current_category)
-
         self.analyzer = ExpenseAnalyzer(self.expenses)
         self.refresh_expenses()
 
