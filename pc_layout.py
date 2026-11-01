@@ -137,7 +137,7 @@ class ExpenseLayout(ctk.CTk):
         save_button.grid(row=4, column=0, columnspan=2, sticky='ew', padx=(10, 10))
 
         # exit button
-        exit_button = ctk.CTkButton(input_frame, text='Exit', font=DEFAULT_FONT, corner_radius=25, command=lambda: exit())
+        exit_button = ctk.CTkButton(input_frame, text='Exit', font=DEFAULT_FONT, corner_radius=25, command=self.destroy)
         exit_button.grid(row=5, column=0, columnspan=2, sticky='ew', padx=(10, 10))
 
     # otevře okno s detaily
